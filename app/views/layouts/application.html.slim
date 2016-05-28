@@ -8,9 +8,45 @@ html
 
     = yield :stylesheets
   body
-    p.notice = notice
-    p.alert = alert
+    .navbar.navbar-default
+      .container
+        a.navbar-brand href="#"  Brand
+        ul.nav.navbar-nav
+          li.active
+            a href="#"  Home
+          li
+            a href="#"  Link
+          li
+            a href="#"  Link
+          li.divider-vertical
+          li
+            a href="#"  More
+          li
+            a href="#"  Options
+        ul.nav.navbar-nav.navbar-right
+          li
+            a href="#"  Link
+          li.dropdown
+            a.dropdown-toggle aria-expanded="false" aria-haspopup="true" data-toggle="dropdown" href="#" role="button"
+              | Dropdown
+              span.caret
+            ul.dropdown-menu
+              li
+                a href="" Profile
+              li.divider role="separator"
+              li
+                - if user_signed_in?
+                  = link_to 'Sign out', destroy_user_session_path, method: :delete
+                - else
+                  = link_to 'Sign in', new_user_session_path
+    - if flash[:notice]
+      .alert.alert-success = notice
+    - elsif flash[:alert]
+      .alert.alert-danger = notice alert
 
-    = yield
+
+
+    .container
+      = yield
 
     = yield :javascripts
