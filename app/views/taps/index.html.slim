@@ -1,8 +1,11 @@
 - @taps.each do |tap|
-  .field = tap.id
-  .field = tap.location
-  = link_to 'Show detail', tap_path(tap)
-  = link_to 'Edit', edit_tap_path(tap), class: 'btn btn-default'
-  = link_to 'Delete', tap_path(tap), method: :delete, class: 'btn btn-default'
+  p
+    .field = tap.id
+    .field = tap.location
+    .field = tap.created_at
+    .btn-group.btn-group-sm role = "group"
+      = link_to 'Detail', tap_path(tap), class: 'btn btn-primary'
+      = link_to 'Edit', edit_tap_path(tap), class: 'btn btn-warning'
+      = link_to 'Delete', tap_path(tap), method: :delete, class: 'btn btn-danger'
 
-= link_to 'Logout', destroy_user_session_path(current_user), method: :delete
+.field = link_to 'New', new_tap_path, class: 'btn btn-default btn-sm'
