@@ -19,7 +19,7 @@ class TapsController < ApplicationController
   end
 
   def create
-    @tap = Tap.new(tap_params)
+    @tap = Tap.new()
     @tap.save
 
     redirect_to :action => :index
@@ -37,6 +37,17 @@ class TapsController < ApplicationController
     @tap.destroy
 
     redirect_to :action => :index
+  end
+
+  def turn_on
+    @tap = Tap.find(params[:id])
+    @user = User.find_by_rfid(params[:rfidnji3])
+
+    if @tap!=nil && @user!=nil
+    #   return true
+    else
+    #   return false
+    end
   end
 
   private
