@@ -21,7 +21,7 @@ class TapsController < ApplicationController
   end
 
   def create
-    @tap = Tap.new()
+    @tap = Tap.new(tap_params)
     @tap.save
 
     redirect_to :action => :index
