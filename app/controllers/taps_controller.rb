@@ -1,6 +1,8 @@
 class TapsController < ApplicationController
   respond_to :html
 
+  protect_from_forgery except: [:turn_on]
+
   def index
     @taps = Tap.all
     respond_with @taps
@@ -41,18 +43,22 @@ class TapsController < ApplicationController
 
   def turn_on
     @tap = Tap.find(params[:id])
-    @user = User.find_by_rfid(params[:rfidnji3])
+    @user = User.find_by_rfid(params[:rfid])
 
     if @tap!=nil && @user!=nil
-    #   return true
+      respond_to do |format|
+        format.json { render :text => '1' }
+      end
     else
-    #   return false
+      respond_to do |format|
+        format.json { render :text => '0' }
+      end
     end
   end
 
   private
 
   def tap_params
-    params.require(:tap).permit(:location, :created_at)
+    params.require(:tap).permit(:location, :created_at, :updated_at)
   end
 end

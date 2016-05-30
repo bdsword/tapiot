@@ -4,7 +4,7 @@ Rails.application.routes.draw do
 
   resources :taps do
     member do
-      post 'on'
+      post 'on', to: 'taps#turn_on'
     end
   end
 
