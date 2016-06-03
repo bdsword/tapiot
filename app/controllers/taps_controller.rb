@@ -1,7 +1,7 @@
 class TapsController < ApplicationController
   respond_to :html
 
-  protect_from_forgery except: [:turn_on]
+  protect_from_forgery except: [:turn_on, :turn_off]
 
   def index
     @taps = Tap.all
@@ -46,9 +46,32 @@ class TapsController < ApplicationController
     @user = User.find_by_rfid(params[:rfid])
 
     if @tap!=nil && @user!=nil
+      # create a record in water_uses
+      @water_use = WaterUse.new(:tap_id => @tap.id, :user_id => @user.id)
+      @water_use.save!
+
+      respond_to do |format|
+        format.json { render :text => '1 ' + @water_use.id }
+      end
+    else
+      respond_to do |format|
+        format.json { render :text => '0' }
+      end
+    end
+  end
+
+  def turn_off
+    @tap = Tap.find(params[:id])
+    @user = User.find_by_rfid(params[:rfid])
+
+    if @tap!=nil && @user!=nil
       respond_to do |format|
         format.json { render :text => '1' }
       end
+
+      # update record in water_uses
+      @water_use = WaterUse.find(params[:record_id])
+      @water_use.update(:water_consumed => params[:water_used])
     else
       respond_to do |format|
         format.json { render :text => '0' }
