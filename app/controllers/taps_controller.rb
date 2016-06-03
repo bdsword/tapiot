@@ -51,11 +51,11 @@ class TapsController < ApplicationController
       @water_use.save!
 
       respond_to do |format|
-        format.json { render :text => '1 ' + @water_use.id }
+        format.json { render text: "1 #{@water_use.id}" }
       end
     else
       respond_to do |format|
-        format.json { render :text => '0' }
+        format.json { render text: '0' }
       end
     end
   end
@@ -66,7 +66,7 @@ class TapsController < ApplicationController
 
     if @tap!=nil && @user!=nil
       respond_to do |format|
-        format.json { render :text => '1' }
+        format.json { render text: '1' }
       end
 
       # update record in water_uses
@@ -74,7 +74,7 @@ class TapsController < ApplicationController
       @water_use.update(:water_consumed => params[:water_used])
     else
       respond_to do |format|
-        format.json { render :text => '0' }
+        format.json { render text: '0' }
       end
     end
   end
