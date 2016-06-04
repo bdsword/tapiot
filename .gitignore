@@ -17,3 +17,5 @@
 /tmp
 
 .env
+lib/tasks/arduino_client_emulator_configurations.rb
+lib/tasks/arduino_server_configurations.rb
