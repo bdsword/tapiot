@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160530035402) do
+ActiveRecord::Schema.define(version: 20160604145155) do
 
   create_table "taps", force: :cascade do |t|
     t.string   "location",   limit: 255
@@ -41,8 +41,9 @@ ActiveRecord::Schema.define(version: 20160530035402) do
     t.integer  "tap_id",         limit: 4
     t.integer  "user_id",        limit: 4
     t.float    "water_consumed", limit: 24
-    t.datetime "created_at",                null: false
-    t.datetime "updated_at",                null: false
+    t.datetime "created_at",                 null: false
+    t.datetime "updated_at",                 null: false
+    t.string   "turn_off_token", limit: 255
   end
 
 end
