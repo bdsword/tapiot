@@ -45,9 +45,9 @@ class TapsController < ApplicationController
     @tap = Tap.find(params[:id])
     @user = User.find_by_rfid(params[:rfid])
 
-    if @tap!=nil && @user!=nil
+    if @tap.present? && @user.present?
       # create a record in water_uses
-      @water_use = WaterUse.new(:tap_id => @tap.id, :user_id => @user.id)
+      @water_use = WaterUse.new(tap_id: @tap.id, user_id: @user.id)
       @water_use.save!
 
       respond_to do |format|
