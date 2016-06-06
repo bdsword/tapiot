@@ -47,20 +47,20 @@ h4 Search Results
         td = @total_pulses
         /TODO conversion
 
-table.table#water_uses
-  tr
-    th= sort_link @search, :tap_id, 'Tap ID'
-    th= sort_link @search, :user_id, 'User ID'
-    th= sort_link @search, :water_consumed, 'Water Consumed'
-    th= sort_link @search, :created_at, 'Turn on time'
-    th= sort_link @search, :updated_at, 'Turn off time'
-  - @water_uses.each do |water_uses|
+table.table.table-hover#water_uses
+  thead
     tr
-      td= water_uses.tap_id
-      td= water_uses.user_id
-      td= water_uses.water_consumed
-      td= water_uses.created_at
-      td= water_uses.updated_at
+      th= sort_link @search, :tap_id, 'Tap ID'
+      th= sort_link @search, :water_consumed, 'Water Consumed'
+      th= sort_link @search, :created_at, 'Turn on time'
+      th= sort_link @search, :updated_at, 'Turn off time'
+  tbody
+    - @water_uses.each do |water_uses|
+      tr
+        td= water_uses.tap_id
+        td= water_uses.water_consumed
+        td= water_uses.created_at
+        td= water_uses.updated_at
 .row.text-center = paginate @water_uses
 
 - content_for :javascripts
