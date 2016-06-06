@@ -32,6 +32,8 @@ gem 'simple_form'
 
 gem 'active_link_to'
 
+gem 'redis'
+
 # Use ActiveModel has_secure_password
 # gem 'bcrypt', '~> 3.1.7'
 

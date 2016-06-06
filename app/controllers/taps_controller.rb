@@ -3,6 +3,9 @@ class TapsController < ApplicationController
 
   protect_from_forgery except: [:turn_on, :turn_off]
 
+  # TODO: :turn_on and :turn_off should be handle by another authenticate method
+  before_action :authenticate_user!, except: [:index, :show, :turn_on, :turn_off, :web_turn_off_update]
+
   def index
     @taps = Tap.all
     respond_with @taps
@@ -45,9 +48,9 @@ class TapsController < ApplicationController
     @tap = Tap.find(params[:id])
     @user = User.find_by_rfid(params[:rfid])
 
-    if @tap!=nil && @user!=nil
+    if @tap.present? && @user.present?
       # create a record in water_uses
-      @water_use = WaterUse.new(:tap_id => @tap.id, :user_id => @user.id)
+      @water_use = WaterUse.new(tap_id: @tap.id, user_id: @user.id)
       @water_use.save!
 
       respond_to do |format|
@@ -61,22 +64,70 @@ class TapsController < ApplicationController
   end
 
   def turn_off
-    @tap = Tap.find(params[:id])
     @user = User.find_by_rfid(params[:rfid])
+    @water_use = WaterUse.find_by(id: params[:record_id], user_id: @user.id, tap_id: params[:id])
 
-    if @tap!=nil && @user!=nil
+    if @water_use.present?
+      # update record in water_uses
+      @water_use.update(water_consumed: params[:water_used])
+
       respond_to do |format|
         format.json { render text: '1' }
       end
-
-      # update record in water_uses
-      @water_use = WaterUse.find(params[:record_id])
-      @water_use.update(:water_consumed => params[:water_used])
     else
       respond_to do |format|
         format.json { render text: '0' }
       end
     end
+  end
+
+  def web_turn_on
+    @tap = Tap.find(params[:id])
+
+    if @tap.present?
+      if WaterUse.exists?(tap_id: @tap.id, water_consumed: nil)
+        flash[:alert] = 'The tap is in use!'
+      else
+        @water_use = WaterUse.new(tap_id: @tap.id, user_id: current_user.id)
+        @water_use.save!
+        Redis.new.publish(:website_active_queue, {action: 1, tap_id: @tap.id, record_id: @water_use.id})
+        flash[:notice] = 'Turn on success!'
+      end
+    else
+      flash[:alert] = 'The tap does not exist!'
+    end
+    redirect_to action: :index
+  end
+
+  def web_turn_off
+    @tap = Tap.find(params[:id])
+
+    if @tap.present?
+      @water_use = WaterUse.find_by(tap_id: @tap.id, user_id: current_user.id, water_consumed: nil)
+      if @water_use.present?
+        @water_use.turn_off_token = SecureRandom.base64(128)
+        @water_use.save!
+        Redis.new.publish(:website_active_queue, {action: 0, tap_id: @tap.id,
+                                                  turn_off_token: @water_use.turn_off_token})
+        flash[:notice] = 'Turn off success!'
+      else
+        flash[:alert] = 'The tap is not in use!'
+      end
+    else
+      flash[:alert] = 'The tap does not exist!'
+    end
+
+    redirect_to action: :index
+  end
+
+  def web_turn_off_update
+    @record = WaterUse.find_by(turn_off_token: params[:turn_off_token])
+
+    if @record.present?
+      @record.water_consumed = params[:water_used]
+      @record.save!
+    end
+    head(:ok, content_type: 'text/html')
   end
 
   private

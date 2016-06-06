@@ -7,5 +7,7 @@
       = link_to 'Detail', tap_path(tap), class: 'btn btn-primary'
       = link_to 'Edit', edit_tap_path(tap), class: 'btn btn-warning'
       = link_to 'Delete', tap_path(tap), method: :delete, class: 'btn btn-danger'
+      = link_to 'Turn on', web_on_tap_path(tap), method: :post, class: 'btn btn-info'
+      = link_to 'Turn off', web_off_tap_path(tap), method: :post, class: 'btn btn-success'
 
 .field = link_to 'New', new_tap_path, class: 'btn btn-default btn-sm'
