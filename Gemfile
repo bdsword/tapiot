@@ -41,6 +41,8 @@ gem 'active_link_to'
 
 gem 'redis'
 
+gem "chartkick"
+
 # Use ActiveModel has_secure_password
 # gem 'bcrypt', '~> 3.1.7'
 
