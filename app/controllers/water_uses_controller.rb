@@ -1,30 +1,24 @@
 class WaterUsesController < ApplicationController
   respond_to :html
 
+  before_action :authenticate_user!
+
   def index
-    # list user's records
+    @search = WaterUse.search(params[:q])
+    @water_uses = @search.result.where(user_id: current_user.id)
+
+    @total_pulses = 0
+    @total_time = 0
+    @water_uses.each do |water_use|
+      @total_pulses += water_use.water_consumed
+      @total_time += (water_use.updated_at - water_use.created_at)
+    end
+
+    @water_uses = @search.result.where(user_id: current_user.id).page(params[:page]).per(10)
   end
 
-  def show
-    # show record detail
-  end
-
-  def new
-  end
-
-  def edit
-  end
-
-  def create
-  end
-
-  def update
-  end
-
-  def destroy
-    @water_use = WaterUse.find(params[:id])
-    @water_use.destroy
-
-    redirect_to :action => :index
+  def search
+    index
+    render :index
   end
 end
