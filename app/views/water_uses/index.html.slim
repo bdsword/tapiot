@@ -57,7 +57,7 @@ table.table.table-hover#water_uses
   tbody
     - @water_uses.each do |water_uses|
       tr
-        td= water_uses.tap_id
+        td= link_to water_uses.tap_id, tap_path(water_uses.tap_id)
         td= water_uses.water_consumed
         td= water_uses.created_at
         td= water_uses.updated_at
