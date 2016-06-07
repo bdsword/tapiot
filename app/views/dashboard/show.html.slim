@@ -1,4 +1,5 @@
 h3 My record for the past month
+hr
 .row
   .col-md-6
     table.table.table-hover
@@ -21,6 +22,7 @@ h3 My record for the past month
             xtitle: "Date", ytitle: "Water consumption"
 
 h3 Top 10 popular taps
+hr
 .row
   .col-md-6
     /TODO: Tap turn on times
@@ -32,6 +34,7 @@ h3 Top 10 popular taps
             xtitle: 'Tap ID', ytitle: 'Total water consumption'
 
 h3 Top 10 maximum water consumption records
+hr
 table.table.table-hover
   thead
     tr
@@ -50,5 +53,6 @@ table.table.table-hover
         td= water_uses.updated_at
 
 h3 Daily total water consumption for the past month
+hr
 = area_chart @system_monthly_water_uses.group_by_day(:created_at).sum(:water_consumed),
         xtitle: "Date", ytitle: "Water consumption"
