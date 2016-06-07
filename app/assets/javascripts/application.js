@@ -18,4 +18,5 @@
 //= require Chart.bundle
 //= require chartkick
 //= require bootstrap-datetimepicker
+//= require cable
 //= require_tree .
