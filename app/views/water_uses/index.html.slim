@@ -26,14 +26,14 @@ p
           .col-sm-3.control-label
             = f.label :created_at_gteq, 'Turn on time from'
           .col-sm-3
-            #datetimepicker1.input-group.date
+            #datetimepicker_from.input-group.date
               = f.text_field :created_at_gteq, class: 'form-control', data: {date_format: 'YYYY-MM-DD HH:mm:ss'}
               span.input-group-addon
                 span.glyphicon.glyphicon-calendar
           .col-sm-1.control-label style='text-align: center; font-weight: bold;'
             | to
           .col-sm-3
-            #datetimepicker2.input-group.date
+            #datetimepicker_to.input-group.date
               = f.text_field :updated_at_lteq, class: 'form-control', data: {date_format: 'YYYY-MM-DD HH:mm:ss'}
               span.input-group-addon
                 span.glyphicon.glyphicon-calendar
@@ -50,14 +50,14 @@ h4 Search Results
       tr
         th.text-nowrap scope='row' Total water consumption
         td = @total_pulses
-        /TODO pulses only, need conversion
+        /TODO: pulses only, need conversion
       tr
         th.text-nowrap scope='row' Total water consumption time (min.)
         td = @total_time / 60
       tr
         th.text-nowrap scope='row' Total cost with $5 per 1000 L
         td = @total_pulses
-        /TODO conversion
+        /TODO: conversion
 
 table.table.table-hover#water_uses
   thead
@@ -71,7 +71,7 @@ table.table.table-hover#water_uses
       tr
         td = link_to water_uses.tap_id, tap_path(water_uses.tap_id)
         td = water_uses.water_consumed
-        /TODO pulses only, need conversion
+        /TODO: pulses only, need conversion
         td = water_uses.created_at
         td = water_uses.updated_at
 .row.text-center = paginate @water_uses
@@ -79,12 +79,12 @@ table.table.table-hover#water_uses
 - content_for :javascripts
   coffee:
     $ ->
-      $('#datetimepicker1').datetimepicker()
-      $('#datetimepicker2').datetimepicker useCurrent: false
-      $('#datetimepicker1').on 'dp.change', (e) ->
-        $('#datetimepicker2').data('DateTimePicker').minDate e.date
+      $('#datetimepicker_from').datetimepicker({allowInputToggle: true})
+      $('#datetimepicker_to').datetimepicker({allowInputToggle: true, useCurrent: false})
+      $('#datetimepicker_from').on 'dp.change', (e) ->
+        $('#datetimepicker_to').data('DateTimePicker').minDate e.date
         return
-      $('#datetimepicker2').on 'dp.change', (e) ->
-        $('#datetimepicker1').data('DateTimePicker').maxDate e.date
+      $('#datetimepicker_to').on 'dp.change', (e) ->
+        $('#datetimepicker_from').data('DateTimePicker').maxDate e.date
         return
       return
