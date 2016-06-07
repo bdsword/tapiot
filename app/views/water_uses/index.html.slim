@@ -62,18 +62,18 @@ h4 Search Results
 table.table.table-hover#water_uses
   thead
     tr
-      th= sort_link @search, :tap_id, 'Tap ID'
-      th= sort_link @search, :water_consumed, 'Water Consumed'
-      th= sort_link @search, :created_at, 'Turn on time'
-      th= sort_link @search, :updated_at, 'Turn off time'
+      th = sort_link @search, :tap_id, 'Tap ID'
+      th = sort_link @search, :water_consumed, 'Water Consumed'
+      th = sort_link @search, :created_at, 'Turn on time'
+      th = sort_link @search, :updated_at, 'Turn off time'
   tbody
     - @water_uses.each do |water_uses|
       tr
-        td= link_to water_uses.tap_id, tap_path(water_uses.tap_id)
-        td= water_uses.water_consumed
+        td = link_to water_uses.tap_id, tap_path(water_uses.tap_id)
+        td = water_uses.water_consumed
         /TODO pulses only, need conversion
-        td= water_uses.created_at
-        td= water_uses.updated_at
+        td = water_uses.created_at
+        td = water_uses.updated_at
 .row.text-center = paginate @water_uses
 
 - content_for :javascripts
