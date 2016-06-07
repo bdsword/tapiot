@@ -10,12 +10,19 @@ class TapsController < ApplicationController
   end
 
   def index
-    @taps = Tap.all
+    @search = Tap.search(params[:q])
+    @taps = @search.result.page(params[:page]).per(15)
+
     respond_with @taps
   end
 
   def show
     @tap = Tap.find(params[:id])
+
+    @search = WaterUse.search(params[:q])
+    @water_uses = @search.result.where(tap_id: params[:id]).page(params[:page]).per(15)
+
+    respond_with @tap
   end
 
   def new

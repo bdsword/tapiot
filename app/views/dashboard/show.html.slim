@@ -9,7 +9,7 @@ h3 My record for the past month
           th= sort_link @search, :created_at, 'Turn on time'
           th= sort_link @search, :updated_at, 'Turn off time'
       tbody
-        - @water_uses_1.each do |water_uses|
+        - @user_monthly_water_uses.each do |water_uses|
           tr
             td= link_to water_uses.tap_id, tap_path(water_uses.tap_id)
             td= water_uses.water_consumed
@@ -17,18 +17,18 @@ h3 My record for the past month
             td= water_uses.updated_at
   .col-md-6
     /TODO: my month record chart
-    = area_chart @water_uses_1.group_by_day(:created_at).sum(:water_consumed),
+    = area_chart @user_monthly_water_uses.group_by_day(:created_at).sum(:water_consumed),
             xtitle: "Date", ytitle: "Water consumption"
 
 h3 Top 10 popular taps
 .row
   .col-md-6
     /TODO: Tap turn on times
-    = column_chart @water_uses_2.map {|key, value| ["#{key}", value]},
+    = column_chart @top10_used_count_water_uses.map {|key, value| ["#{key}", value]},
             xtitle: "Tap ID", ytitle: "Number of turn on times"
   .col-md-6
     /TODO: Total water consumption
-    = column_chart @water_uses_3.map {|key, value| ["#{key}", value]},
+    = column_chart @top10_tap_water_water_uses.map {|key, value| ["#{key}", value]},
             xtitle: 'Tap ID', ytitle: 'Total water consumption'
 
 h3 Top 10 maximum water consumption records
@@ -41,7 +41,7 @@ table.table.table-hover
       th= sort_link @search, :created_at, 'Turn on time'
       th= sort_link @search, :updated_at, 'Turn off time'
   tbody
-    - @water_uses_4.each do |water_uses|
+    - @top10_water_uses.each do |water_uses|
       tr
         td= link_to water_uses.tap_id, tap_path(water_uses.tap_id)
         td= water_uses.user_id
@@ -50,5 +50,5 @@ table.table.table-hover
         td= water_uses.updated_at
 
 h3 Daily total water consumption for the past month
-= area_chart @water_uses_5.group_by_day(:created_at).sum(:water_consumed),
+= area_chart @system_monthly_water_uses.group_by_day(:created_at).sum(:water_consumed),
         xtitle: "Date", ytitle: "Water consumption"

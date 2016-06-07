@@ -1,13 +1,73 @@
-- @taps.each do |tap|
-  p
-    .field = tap.id
-    .field = tap.location
-    .field = tap.created_at
-    .btn-group.btn-group-sm role = "group"
-      = link_to 'Detail', tap_path(tap), class: 'btn btn-primary'
-      = link_to 'Edit', edit_tap_path(tap), class: 'btn btn-warning'
-      = link_to 'Delete', tap_path(tap), method: :delete, class: 'btn btn-danger'
-      = link_to 'Turn on', web_on_tap_path(tap), method: :post, class: 'btn btn-info'
-      = link_to 'Turn off', web_off_tap_path(tap), method: :post, class: 'btn btn-success'
+h3 Taps list
+h4 Search conditions
+p
+  .form-horizontal
+    = search_form_for @search do |f|
+      .form-group
+        .row
+          .col-md-2.control-label
+            = f.label :location_cont, 'Location contains'
+          .col-md-3
+            = f.text_field :location_cont, class: 'form-control'
 
-.field = link_to 'New', new_tap_path, class: 'btn btn-default btn-sm'
+      .form-group
+        .row
+          .col-md-2.control-label
+            = f.label :created_at_gteq, 'Create time from'
+          .col-md-3
+            #datetimepicker_from.input-group.date
+              = f.text_field :created_at_gteq, class: 'form-control', data: {date_format: 'YYYY-MM-DD HH:mm:ss'}
+              span.input-group-addon
+                span.glyphicon.glyphicon-calendar
+          .col-md-1.control-label style='text-align : center; font-weight : bold;'
+            | to
+          .col-md-3
+            #datetimepicker_to.input-group.date
+              = f.text_field :updated_at_lteq, class: 'form-control', data: {date_format: 'YYYY-MM-DD HH:mm:ss'}
+              span.input-group-addon
+                span.glyphicon.glyphicon-calendar
+
+      .form-group
+        .row
+          .col-md-5.col-md-offset-2
+            = f.submit 'Search', class: 'btn btn-default'
+
+
+h4 Search Results
+table.table.table-hover
+  thead
+    tr
+      th Tap ID
+      th Location
+      th = sort_link @search, :created_at, 'Create time'
+      th Operations
+  tbody
+    - @taps.each do |tap|
+      tr
+        td = tap.id
+        td = tap.location
+        td = tap.created_at
+        td
+          .btn-group.btn-group-sm role = "group"
+            = link_to 'Detail', tap_path(tap), class: 'btn btn-primary'
+            = link_to 'Turn on', web_on_tap_path(tap), method: :post, class: 'btn btn-success'
+            = link_to 'Turn off', web_off_tap_path(tap), method: :post, class: 'btn btn-danger'
+.row.text-center = paginate @taps
+
+/TODO: admin only
+/= link_to 'Edit', edit_tap_path(tap), class: 'btn btn-warning'
+/= link_to 'Delete', tap_path(tap), method: :delete, class: 'btn btn-danger'
+/.field = link_to 'New', new_tap_path, class: 'btn btn-default btn-sm'
+
+- content_for :javascripts
+coffee:
+  $ ->
+    $('#datetimepicker_from').datetimepicker({allowInputToggle: true})
+    $('#datetimepicker_to').datetimepicker({allowInputToggle: true, useCurrent: false})
+    $('#datetimepicker_from').on 'dp.change', (e) ->
+      $('#datetimepicker_to').data('DateTimePicker').minDate e.date
+      return
+    $('#datetimepicker_to').on 'dp.change', (e) ->
+      $('#datetimepicker_from').data('DateTimePicker').maxDate e.date
+      return
+    return

@@ -5,13 +5,13 @@ class DashboardController < ApplicationController
 
   def show
     @search = WaterUse.search(params[:q])
-    @water_uses_1 = @search.result.where(user_id: current_user.id, created_at: (Time.now - 1.month)..Time.now)
+    @user_monthly_water_uses = @search.result.where(user_id: current_user.id, created_at: (Time.now - 1.month)..Time.now)
 
-    @water_uses_2 = @search.result.group(:tap_id).order('COUNT(id) DESC').count(:id)
-    @water_uses_3 = @search.result.group(:tap_id).order('SUM(water_consumed) DESC').sum(:water_consumed)
+    @top10_used_count_water_uses = @search.result.group(:tap_id).order('COUNT(id) DESC').limit(10).count(:id)
+    @top10_tap_water_water_uses = @search.result.group(:tap_id).order('SUM(water_consumed) DESC').limit(10).sum(:water_consumed)
 
-    @water_uses_4 = @search.result.order(water_consumed: :desc).limit(10)
+    @top10_water_uses = @search.result.order(water_consumed: :desc).limit(10)
 
-    @water_uses_5 = @search.result.where(created_at: (Time.now - 1.month)..Time.now)
+    @system_monthly_water_uses = @search.result.where(created_at: (Time.now - 1.month)..Time.now)
   end
 end
