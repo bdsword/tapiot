@@ -1,35 +1,47 @@
 h3 Records
 h4 Search conditions
 p
-  = search_form_for @search do |f|
-    .field
-      = f.label :tap_id_eq, 'Tap ID contains:'
-      = f.search_field :tap_id_eq
+  .form-horizontal
+    = search_form_for @search do |f|
+      .form-group
+        .row
+          .col-md-3.control-label
+            = f.label :tap_id_eq, 'Tap ID contains'
+          .col-md-3
+            = f.search_field :tap_id_eq, class: 'form-control'
 
-    .field
-      = f.label :water_consumed_gteq, 'Water consumption (cc): between'
-      = f.search_field :water_consumed_gteq
-      = f.label :water_consumed_lteq, 'and'
-      = f.search_field :water_consumed_lteq
+      .form-group
+        .row
+          .col-md-3.control-label
+            = f.label :water_consumed_gteq, 'Water consumption between'
+          .col-md-3
+            = f.text_field :water_consumed_gteq, class: 'form-control'
+          .col-md-1.control-label style='text-align: center; font-weight: bold;'
+            | and
+          .col-sm-3
+            = f.text_field :water_consumed_lteq, class: 'form-control'
 
-    .container
-      .row
-        .col-sm-2 = 'Start from'
-        .col-sm-4
-          .form-group
+      .form-group
+        .row
+          .col-sm-3.control-label
+            = f.label :created_at_gteq, 'Turn on time from'
+          .col-sm-3
             #datetimepicker1.input-group.date
               = f.text_field :created_at_gteq, class: 'form-control', data: {date_format: 'YYYY-MM-DD HH:mm:ss'}
               span.input-group-addon
                 span.glyphicon.glyphicon-calendar
-        .col-sm-1 = 'to'
-        .col-sm-4
-          .form-group
+          .col-sm-1.control-label style='text-align: center; font-weight: bold;'
+            | to
+          .col-sm-3
             #datetimepicker2.input-group.date
               = f.text_field :updated_at_lteq, class: 'form-control', data: {date_format: 'YYYY-MM-DD HH:mm:ss'}
               span.input-group-addon
                 span.glyphicon.glyphicon-calendar
 
-    = f.submit 'Search'
+      .form-group
+        .row
+          .col-sm-5.col-sm-offset-3
+            = f.submit 'Search', class: 'btn btn-default'
 
 h4 Search Results
 .row
@@ -59,6 +71,7 @@ table.table.table-hover#water_uses
       tr
         td= link_to water_uses.tap_id, tap_path(water_uses.tap_id)
         td= water_uses.water_consumed
+        /TODO pulses only, need conversion
         td= water_uses.created_at
         td= water_uses.updated_at
 .row.text-center = paginate @water_uses

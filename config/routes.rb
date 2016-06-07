@@ -14,9 +14,5 @@ Rails.application.routes.draw do
     post 'web_off_update', on: :collection, to: 'taps#web_turn_off_update'
   end
 
-  resources :water_uses do
-    collection do
-      match 'search' => 'water_uses#search', via: [:get, :post], as: :search
-    end
-  end
+  get 'water_uses', to: 'water_uses#index'
 end
