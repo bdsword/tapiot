@@ -33,6 +33,8 @@ gem 'bootstrap3-datetimepicker-rails', '~> 4.17.37'
 
 gem 'kaminari'
 
+gem 'groupdate'
+
 gem 'bootstrap-sass', '~> 3.3.6'
 
 gem 'simple_form'
