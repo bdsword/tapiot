@@ -1,6 +1,77 @@
-h3
-  | Detail information
+h3 Tap #{@tap.id} detail information
+h4 Search conditions
 p
-  .field = @tap.id
-  .field = @tap.location
+  .form-horizontal
+    = search_form_for @search, url: tap_path(@tap.id)  do |f|
+      .form-group
+        .row
+          .col-sm-3.control-label
+            = f.label :user_id_eq, 'User ID'
+          .col-sm-3
+            = f.text_field :user_id_eq, class: 'form-control'
+
+      .form-group
+        .row
+          .col-sm-3.control-label
+            = f.label :water_consumed_gteq, 'Water consumption between'
+          .col-sm-3
+            = f.text_field :water_consumed_gteq, class: 'form-control'
+          .col-sm-1.control-label style='text-align: center; font-weight: bold;'
+            | and
+          .col-sm-3
+            = f.text_field :water_consumed_lteq, class: 'form-control'
+
+      .form-group
+        .row
+          .col-sm-3.control-label
+            = f.label :created_at_gteq, 'Turn on time from'
+          .col-sm-3
+            #datetimepicker1.input-group.date
+              = f.text_field :created_at_gteq, class: 'form-control', data: {date_format: 'YYYY-MM-DD HH:mm:ss'}
+              span.input-group-addon
+                span.glyphicon.glyphicon-calendar
+          .col-sm-1.control-label style='text-align: center; font-weight: bold;'
+            | to
+          .col-sm-3
+            #datetimepicker2.input-group.date
+              = f.text_field :updated_at_lteq, class: 'form-control', data: {date_format: 'YYYY-MM-DD HH:mm:ss'}
+              span.input-group-addon
+                span.glyphicon.glyphicon-calendar
+
+      .form-group
+        .row
+          .col-sm-5.col-sm-offset-3
+            = f.submit 'Search', class: 'btn btn-default'
+
+
+h4 Search Results
+table.table.table-hover
+  thead
+    tr
+      th = sort_link @search, :user_id, 'User ID'
+      th = sort_link @search, :water_consumed, 'Water Consumed'
+      th = sort_link @search, :created_at, 'Turn on time'
+      th = sort_link @search, :updated_at, 'Turn off time'
+  tbody
+    - @water_uses.each do |water_uses|
+      tr
+        td = water_uses.user_id
+        td = water_uses.water_consumed
+        /TODO: pulses convert to cc
+        td = water_uses.created_at
+        td = water_uses.updated_at
+.row.text-center = paginate @water_uses
+
+- content_for :javascripts
+coffee:
+  $ ->
+    $('#datetimepicker1').datetimepicker({allowInputToggle: true})
+    $('#datetimepicker2').datetimepicker({allowInputToggle: true, useCurrent: false})
+    $('#datetimepicker1').on 'dp.change', (e) ->
+      $('#datetimepicker2').data('DateTimePicker').minDate e.date
+      return
+    $('#datetimepicker2').on 'dp.change', (e) ->
+      $('#datetimepicker1').data('DateTimePicker').maxDate e.date
+      return
+    return
 
