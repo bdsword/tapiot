@@ -5,6 +5,9 @@ class TapsController < ApplicationController
 
   # TODO: :turn_on and :turn_off should be handle by another authenticate method
   before_action :authenticate_user!, except: [:index, :show, :turn_on, :turn_off, :web_turn_off_update]
+  before_action only: [:new, :edit, :create, :update, :destroy] do
+    render(file: 'public/403.html', status: :forbidden, layout: false) unless current_user.admin?
+  end
 
   def index
     @taps = Tap.all
