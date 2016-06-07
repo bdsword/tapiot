@@ -5,34 +5,34 @@ p
     = search_form_for @search, url: tap_path(@tap.id)  do |f|
       .form-group
         .row
-          .col-sm-3.control-label
+          .col-md-3.control-label
             = f.label :user_id_eq, 'User ID'
-          .col-sm-3
+          .col-md-3
             = f.text_field :user_id_eq, class: 'form-control'
 
       .form-group
         .row
-          .col-sm-3.control-label
+          .col-md-3.control-label
             = f.label :water_consumed_gteq, 'Water consumption between'
-          .col-sm-3
+          .col-md-3
             = f.text_field :water_consumed_gteq, class: 'form-control'
-          .col-sm-1.control-label style='text-align: center; font-weight: bold;'
+          .col-md-1.control-label style='text-align: center; font-weight: bold;'
             | and
-          .col-sm-3
+          .col-md-3
             = f.text_field :water_consumed_lteq, class: 'form-control'
 
       .form-group
         .row
-          .col-sm-3.control-label
+          .col-md-3.control-label
             = f.label :created_at_gteq, 'Turn on time from'
-          .col-sm-3
+          .col-md-3
             #datetimepicker1.input-group.date
               = f.text_field :created_at_gteq, class: 'form-control', data: {date_format: 'YYYY-MM-DD HH:mm:ss'}
               span.input-group-addon
                 span.glyphicon.glyphicon-calendar
-          .col-sm-1.control-label style='text-align: center; font-weight: bold;'
+          .col-md-1.control-label style='text-align: center; font-weight: bold;'
             | to
-          .col-sm-3
+          .col-md-3
             #datetimepicker2.input-group.date
               = f.text_field :updated_at_lteq, class: 'form-control', data: {date_format: 'YYYY-MM-DD HH:mm:ss'}
               span.input-group-addon
@@ -40,7 +40,7 @@ p
 
       .form-group
         .row
-          .col-sm-5.col-sm-offset-3
+          .col-md-5.col-md-offset-3
             = f.submit 'Search', class: 'btn btn-default'
 
 
