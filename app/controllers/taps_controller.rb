@@ -20,7 +20,7 @@ class TapsController < ApplicationController
     @tap = Tap.find(params[:id])
 
     @search = WaterUse.search(params[:q])
-    @water_uses = @search.result.where(tap_id: params[:id]).page(params[:page]).per(15)
+    @water_uses = @search.result.where(tap_id: params[:id]).where.not(water_consumed: nil).page(params[:page]).per(15)
 
     respond_with @tap
   end
