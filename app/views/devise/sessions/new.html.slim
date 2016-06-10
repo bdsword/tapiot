@@ -1,45 +1,27 @@
-/h2
-/  | Log in
-/= form_for(resource, as: resource_name, url: session_path(resource_name)) do |f|
-/  .field
-/    = f.label :email
-/    br
-/    = f.email_field :email, autofocus: true
-/  .field
-/    = f.label :password
-/    br
-/    = f.password_field :password, autocomplete: "off"
-/  - if devise_mapping.rememberable?
-/    .field
-/      = f.check_box :remember_me
-/      = f.label :remember_me
-/  .actions
-/    = f.submit "Log in"
-/= render "devise/shared/links"
+= form_for(resource, as: resource_name, url: session_path(resource_name)) do |f|
+  .text-center style=("padding:50px 0")
+    .logo Login
+    .login-form-1
+      form#login-form.text-left
+        .login-form-main-message
+        .main-login-form
+          .login-group
+            .form-group
+              label.sr-only for="user[email]"  Email
+              input#user_email.form-control name="user[email]" placeholder="email" type="text" /
 
+            .form-group
+              label.sr-only for="user[password]"  Password
+              input#user_password.form-control name="user[password]" placeholder="password" type="password" /
 
-.text-center style=("padding:50px 0")
-  .logo Login
-  .login-form-1
-    form#login-form.text-left
-      .login-form-main-message
-      .main-login-form
-        .login-group
-          .form-group
-            label.sr-only for="lg_user_email"  Email
-            input#lg_user_email.form-control name="lg_user_email" placeholder="email" type="text" /
+            - if devise_mapping.rememberable?
+              .form-group.login-group-checkbox
+                input#lg_remember name="lg_remember" type="checkbox" /
+                label for="lg_remember"  remember
 
-          .form-group
-            label.sr-only for="lg_password"  Password
-            input#lg_password.form-control name="lg_password" placeholder="password" type="password" /
+          button.login-button type="submit"
+            i.fa.fa-chevron-right
 
-          - if devise_mapping.rememberable?
-            .form-group.login-group-checkbox
-              input#lg_remember name="lg_remember" type="checkbox" /
-              label for="lg_remember"  remember
+        .etc-login-form
+          = render "devise/shared/links"
 
-        button.login-button type="submit"
-          i.fa.fa-chevron-right
-
-      .etc-login-form
-        = render "devise/shared/links"
