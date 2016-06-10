@@ -12,7 +12,7 @@ class TapsController < ApplicationController
   def index
     @search = Tap.search(params[:q])
     @taps = @search.result.page(params[:page]).per(15)
-
+    @in_use_taps = WaterUse.where(water_consumed: nil).pluck(:tap_id)
     respond_with @taps
   end
 
@@ -63,6 +63,7 @@ class TapsController < ApplicationController
       @water_use = WaterUse.new(tap_id: @tap.id, user_id: @user.id)
       @water_use.save!
 
+      ActionCable.server.broadcast 'taps', {tap_id: @tap.id, state: 1}
       respond_to do |format|
         format.json { render text: "1 #{@water_use.id}" }
       end
@@ -81,6 +82,7 @@ class TapsController < ApplicationController
       # update record in water_uses
       @water_use.update(water_consumed: params[:water_used])
 
+      ActionCable.server.broadcast 'taps', {tap_id: @water_use.tap_id, state: 0}
       respond_to do |format|
         format.json { render text: '1' }
       end
@@ -96,12 +98,14 @@ class TapsController < ApplicationController
 
     if @tap.present?
       if WaterUse.exists?(tap_id: @tap.id, water_consumed: nil)
+        # User should not reach here
         flash[:alert] = 'The tap is in use!'
       else
         @water_use = WaterUse.new(tap_id: @tap.id, user_id: current_user.id)
         @water_use.save!
         Redis.new.publish(:website_active_queue, {action: 1, tap_id: @tap.id, record_id: @water_use.id})
         flash[:notice] = 'Turn on success!'
+        ActionCable.server.broadcast 'taps', {tap_id: @tap.id, state: 1}
       end
     else
       flash[:alert] = 'The tap does not exist!'
@@ -121,6 +125,7 @@ class TapsController < ApplicationController
                                                   turn_off_token: @water_use.turn_off_token})
         flash[:notice] = 'Turn off success!'
       else
+        # User should not reach here
         flash[:alert] = 'The tap is not in use!'
       end
     else
@@ -136,6 +141,7 @@ class TapsController < ApplicationController
     if @record.present?
       @record.water_consumed = params[:water_used]
       @record.save!
+      ActionCable.server.broadcast 'taps', {tap_id: @record.tap_id, state: 0}
     end
     head(:ok, content_type: 'text/html')
   end
