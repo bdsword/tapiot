@@ -1,40 +1,54 @@
 h3 My record for the past month
-hr
 .row
   .col-md-6
-    table.table.table-hover
-      thead
-        tr
-          th= sort_link @search, :tap_id, 'Tap ID'
-          th= sort_link @search, :water_consumed, 'Water Consumed'
-          th= sort_link @search, :created_at, 'Turn on time'
-          th= sort_link @search, :updated_at, 'Turn off time'
-      tbody
-        - @user_monthly_water_uses.each do |water_uses|
-          tr
-            td= link_to water_uses.tap_id, tap_path(water_uses.tap_id)
-            td= water_uses.water_consumed
-            td= water_uses.created_at
-            td= water_uses.updated_at
+    .panel-group
+      .panel.panel-default
+        .panel-heading My records for the past month
+        .panel-body
+          table.table.table-hover
+            thead
+              tr
+                th= sort_link @search, :tap_id, 'Tap ID'
+                th= sort_link @search, :water_consumed, 'Water Consumed'
+                th= sort_link @search, :created_at, 'Turn on time'
+                th= sort_link @search, :updated_at, 'Turn off time'
+            tbody
+              - @user_monthly_water_uses.each do |water_uses|
+                tr
+                  td= link_to water_uses.tap_id, tap_path(water_uses.tap_id)
+                  td= water_uses.water_consumed
+                  td= water_uses.created_at
+                  td= water_uses.updated_at
   .col-md-6
-    /TODO: my month record chart
-    = area_chart @user_monthly_water_uses.group_by_day(:created_at).sum(:water_consumed),
-            xtitle: "Date", ytitle: "Water consumption"
+    .panel.panel-default
+      .panel-heading My water consumption for the past month
+      .panel-body
+        /TODO: my month record chart
+        = area_chart @user_monthly_water_uses.group_by_day(:created_at).sum(:water_consumed),
+                xtitle: "Date", ytitle: "Water consumption"
+
+hr
 
 h3 Top 10 popular taps
-hr
 .row
   .col-md-6
-    /TODO: Tap turn on times
-    = column_chart @top10_used_count_water_uses.map {|key, value| ["#{key}", value]},
-            xtitle: "Tap ID", ytitle: "Number of turn on times"
+    .panel.panel-default
+      .panel-heading Rank by numbers of turn on times
+      .panel-body
+        /TODO: Tap turn on times
+        = column_chart @top10_used_count_water_uses.map {|key, value| ["#{key}", value]},
+                xtitle: "Tap ID", ytitle: "Number of turn on times"
   .col-md-6
-    /TODO: Total water consumption
-    = column_chart @top10_tap_water_water_uses.map {|key, value| ["#{key}", value]},
-            xtitle: 'Tap ID', ytitle: 'Total water consumption'
+    .panel.panel-default
+      .panel-heading Rank by total water consumption
+      .panel-body
+        /TODO: Total water consumption
+        = column_chart @top10_tap_water_water_uses.map {|key, value| ["#{key}", value]},
+                xtitle: 'Tap ID', ytitle: 'Total water consumption'
+
+hr
 
 h3 Top 10 maximum water consumption records
-hr
 table.table.table-hover
   thead
     tr
@@ -52,7 +66,10 @@ table.table.table-hover
         td= water_uses.created_at
         td= water_uses.updated_at
 
-h3 Daily total water consumption for the past month
 hr
-= area_chart @system_monthly_water_uses.group_by_day(:created_at).sum(:water_consumed),
-        xtitle: "Date", ytitle: "Water consumption"
+
+h3 Daily total water consumption for the past month
+.panel.panel-default
+  .panel-body
+    = area_chart @system_monthly_water_uses.group_by_day(:created_at).sum(:water_consumed),
+            xtitle: "Date", ytitle: "Water consumption"
