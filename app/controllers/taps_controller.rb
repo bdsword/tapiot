@@ -117,13 +117,17 @@ class TapsController < ApplicationController
     @tap = Tap.find(params[:id])
 
     if @tap.present?
-      @water_use = WaterUse.find_by(tap_id: @tap.id, user_id: current_user.id, water_consumed: nil)
+      @water_use = WaterUse.find_by(tap_id: @tap.id, water_consumed: nil)
       if @water_use.present?
-        @water_use.turn_off_token = SecureRandom.base64(128)
-        @water_use.save!
-        Redis.new.publish(:website_active_queue, {action: 0, tap_id: @tap.id,
-                                                  turn_off_token: @water_use.turn_off_token})
-        flash[:notice] = 'Turn off success!'
+        if @water_use.user_id == current_user.id
+          @water_use.turn_off_token = SecureRandom.base64(128)
+          @water_use.save!
+          Redis.new.publish(:website_active_queue, {action: 0, tap_id: @tap.id,
+                                                    turn_off_token: @water_use.turn_off_token})
+          flash[:notice] = 'Turn off success!'
+        else
+          flash[:alert] = 'Only the user who turn on this tap is allowed to turn it off!'
+        end
       else
         # User should not reach here
         flash[:alert] = 'The tap is not in use!'
