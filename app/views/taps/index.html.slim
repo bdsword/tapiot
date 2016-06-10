@@ -43,21 +43,30 @@ table.table.table-hover
       th Operations
   tbody
     - @taps.each do |tap|
-      tr
-        td = tap.id
+      tr date-tap-id="#{tap.id}"
+        td
+          = link_to "#{tap.id}", tap_path(tap), class: 'btn btn-default'
         td = tap.location
         td = tap.created_at
         td
-          .btn-group.btn-group-sm role = "group"
-            = link_to 'Detail', tap_path(tap), class: 'btn btn-primary'
-            = link_to 'Turn on', web_on_tap_path(tap), method: :post, class: 'btn btn-success'
-            = link_to 'Turn off', web_off_tap_path(tap), method: :post, class: 'btn btn-danger'
+          .row
+            .col-md-4
+              .btn-group.btn-group-sm role = "group"
+                  - if current_user.admin?
+                    = link_to 'Edit', edit_tap_path(tap), class: 'btn btn-warning'
+                    = link_to 'Delete', tap_path(tap), method: :delete, class: 'btn btn-danger'
+            .col-md-4
+              .btn-group.btn-group-sm role = "group"
+                - if @in_use_taps.try(:include?, tap.id)
+                  = link_to 'Turn on', web_on_tap_path(tap), method: :post, class: 'btn btn-info tap-control-btn disabled', :'data-tap-toggle' => 'on'
+                  = link_to 'Turn off', web_off_tap_path(tap), method: :post, class: 'btn btn-success tap-control-btn', :'data-tap-toggle' => 'off'
+                - else
+                  = link_to 'Turn on', web_on_tap_path(tap), method: :post, class: 'btn btn-info tap-control-btn', :'data-tap-toggle' => 'on'
+                  = link_to 'Turn off', web_off_tap_path(tap), method: :post, class: 'btn btn-success tap-control-btn disabled', :'data-tap-toggle' => 'off'
 .row.text-center = paginate @taps
 
-/TODO: admin only
-/= link_to 'Edit', edit_tap_path(tap), class: 'btn btn-warning'
-/= link_to 'Delete', tap_path(tap), method: :delete, class: 'btn btn-danger'
-/.field = link_to 'New', new_tap_path, class: 'btn btn-default btn-sm'
+- if current_user.admin?
+  = link_to 'New', new_tap_path, class: 'btn btn-default btn-sm'
 
 - content_for :javascripts
 coffee:
@@ -71,3 +80,16 @@ coffee:
       $('#datetimepicker_from').data('DateTimePicker').maxDate e.date
       return
     return
+
+  $(App.tap_informations).on 'received', (event, data) ->
+    $changed_tap = $("[date-tap-id=#{data.tap_id}]")
+
+    if $changed_tap
+      if data.state == 1
+        $changed_tap.find('a[data-tap-toggle=off]').removeClass('disabled')
+        $changed_tap.find('a[data-tap-toggle=on]').addClass('disabled')
+      else if data.state == 0
+        $changed_tap.find('a[data-tap-toggle=on]').removeClass('disabled')
+        $changed_tap.find('a[data-tap-toggle=off]').addClass('disabled')
+
+    console.log("Received #{event}: #{JSON.stringify(data)}\n");
