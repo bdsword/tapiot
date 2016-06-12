@@ -80,7 +80,7 @@ class TapsController < ApplicationController
 
     if @water_use.present?
       # update record in water_uses
-      @water_use.update(water_consumed: params[:water_used])
+      @water_use.update(water_consumed: params[:water_used] / 450 * 1000)
 
       ActionCable.server.broadcast 'taps', {tap_id: @water_use.tap_id, state: 0}
       respond_to do |format|
@@ -143,8 +143,8 @@ class TapsController < ApplicationController
     @record = WaterUse.find_by(turn_off_token: params[:turn_off_token])
 
     if @record.present?
-      @record.water_consumed = params[:water_used]
-      @record.save!
+      @record.water_consumed = params[:water_used] / 450 * 1000
+          @record.save!
       ActionCable.server.broadcast 'taps', {tap_id: @record.tap_id, state: 0}
     end
     head(:ok, content_type: 'text/html')
