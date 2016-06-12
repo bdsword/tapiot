@@ -14,16 +14,15 @@ html
         ul.nav.navbar-nav
           = active_link_to 'Taps', taps_path, wrap_tag: :li
           = active_link_to 'Users', users_path, wrap_tag: :li
+          = active_link_to 'Consumption', water_uses_path, wrap_tag: :li
         ul.nav.navbar-nav.navbar-right
-          li
-            a href="#"  Link
           li.dropdown
             a.dropdown-toggle aria-expanded="false" aria-haspopup="true" data-toggle="dropdown" href="#" role="button"
               | Menu
               span.caret
             ul.dropdown-menu
               li
-                a href="" Profile
+                = link_to 'Profile', edit_user_registration_path
               li.divider role="separator"
               li
                 - if user_signed_in?
@@ -33,15 +32,23 @@ html
 
     .container
       - if flash[:notice]
-        .alert.alert-success.alert-dismissible
+        .alert.alert-success.alert-dismissible.float-alert
           button.close type="button" data-dismiss="alert" aria-label="Close"
             span aria-hidden="true" &times;
           = notice
+        coffee:
+          setTimeout(() ->
+            $('.float-alert').fadeOut()
+          , 3000)
       - elsif flash[:alert]
-        .alert.alert-danger.alert-dismissible
+        .alert.alert-danger.alert-dismissible.float-alert
           button.close type="button" data-dismiss="alert" aria-label="Close"
             span aria-hidden="true" &times;
           = alert
+        coffee:
+          setTimeout(() ->
+            $('.float-alert').fadeOut()
+          , 3000)
       = yield
 
     = yield :javascripts
