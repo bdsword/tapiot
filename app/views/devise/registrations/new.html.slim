@@ -1,8 +1,7 @@
 .text-center style=("padding:50px 0")
-  .logo Sign in
+  .logo Sign up
   .login-form-1
     = form_for(resource, as: resource_name, url: registration_path(resource_name), html: {id: 'register-form', class: 'text-left'}) do |f|
-      = devise_error_messages!
       .login-form-main-message
       .main-login-form
         .login-group
