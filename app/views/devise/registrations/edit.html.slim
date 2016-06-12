@@ -1,95 +1,40 @@
-/h2
-/  | Edit
-/  /= resource_name.to_s.humanize
-/= form_for(resource, as: resource_name, url: registration_path(resource_name), html: { method: :put }) do |f|
-/  = devise_error_messages!
-/  .field
-/    = f.label :name
-/    br
-/    = f.text_field :name, autofocus: true
-/  .field
-/    = f.label :email
-/    br
-/    = f.email_field :email
-/  - if devise_mapping.confirmable? && resource.pending_reconfirmation?
-/    div
-/      | Currently waiting confirmation for:
-/      = resource.unconfirmed_email
-/  .field
-/    = f.label :password
-/    i
-/      | (leave blank if you don't want to change it)
-/    br
-/    = f.password_field :password, autocomplete: "off"
-/  .field
-/    = f.label :password_confirmation
-/    br
-/    = f.password_field :password_confirmation, autocomplete: "off"
-/  .field
-/    = f.label :current_password
-/    i
-/      | (we need your current password to confirm your changes)
-/    br
-/    = f.password_field :current_password, autocomplete: "off"
-/  .actions
-/    = f.submit "Update"
-/h3
-/  | Cancel my account
-/p
-/  | Unhappy?
-/  = button_to "Cancel my account", registration_path(resource_name), data: { confirm: "Are you sure?" }, method: :delete
-/= link_to "Back", :back
-
-
-
 .container style=("padding-top: 60px;")
   h1.page-header Edit Profile
   .row
     .col-md-4.col-sm-6.col-xs-12
       .text-center
-        img.avatar.img-circle.img-thumbnail alt="avatar" src="http://lorempixel.com/200/200/people/9/" /
-        h6 Upload photo
-        input.text-center.center-block.well.well-sm type="file" /
+        i.fa.fa-user aria-hidden='true' style='font-size: 12em; padding: 30px; \
+        border-radius: 35%; border: solid 3px #afafaf; color: #afafaf;'
 
-    = form_for(resource, as: resource_name, url: registration_path(resource_name), html: {method: :put}) do |f|
-      = devise_error_messages!
-      .col-md-8.col-sm-6.col-xs-12.personal-info
+    .col-md-8.col-sm-6.col-xs-12.personal-info
+      - if devise_error_messages!.present?
         .alert.alert-info.alert-dismissable
-          /i.fa.fa-coffee
-            /a.panel-close.close data-dismiss="alert"  ×
+          = devise_error_messages!
+      = form_for(resource, as: resource_name, url: registration_path(resource_name), html: {method: :put, class: 'form-horizontal'}) do |f|
 
-        form.form-horizontal role="form"
-          .form-group
-            label.col-lg-3.control-label Name:
-            .col-lg-8
-              input.form-control type="text" value=""
+        .form-group
+          label.col-lg-3.control-label Name:
+          .col-lg-8
+            = f.text_field :name, class: 'form-control'
 
-          .form-group
-            label.col-lg-3.control-label Email:
-            .col-lg-8
-              input.form-control type="text" value="janesemail@gmail.com"
-            - if devise_mapping.confirmable? && resource.pending_reconfirmation?
-              div Currently waiting confirmation for:
-                = resource.unconfirmed_email
+        .form-group
+          label.col-md-3.control-label Password:
+          .col-md-8
+            = f.password_field :password, class: 'form-control', placeholder: "leave blank if you don't want to change it"
 
-          .form-group
-            label.col-md-3.control-label Password:
-            .col-md-8
-              input.form-control type="password" placeholder="leave blank if you don't want to change it" value=""
+        .form-group
+          label.col-md-3.control-label Confirm password:
+          .col-md-8
+            = f.password_field :password_confirmation, class: 'form-control'
 
-          .form-group
-            label.col-md-3.control-label Confirm password:
-            .col-md-8
-              input.form-control type="password" value=""
+        .form-group
+          label.col-md-3.control-label Current password:
+          .col-md-8
+            = f.password_field :current_password, class: 'form-control', placeholder: 'we need your current password to confirm your changes'
 
-          .form-group
-            label.col-md-3.control-label Current password:
-            .col-md-8
-              input.form-control type="password" placeholder="we need your current password to confirm your changes"
-
-          .form-group
-            label.col-md-3.control-label
-            .col-md-8
-              input.btn.btn-primary type="submit" value="Save Changes"
-              span
-              input.btn.btn-default type="reset" value="Cancel"
+        .form-group
+          label.col-md-3.control-label
+          .col-md-3
+            input.btn.btn-primary type="submit" value="Save Changes"
+          .col-md-3
+            input.btn.btn-default type="reset" value="Cancel"
