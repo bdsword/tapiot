@@ -1,28 +1,33 @@
-h2
-  | Sign up
-= form_for(resource, as: resource_name, url: registration_path(resource_name)) do |f|
-  = devise_error_messages!
-  .field
-    = f.label :name
-    br
-    = f.text_field :name, autofocus: true
-  .field
-    = f.label :email
-    br
-    = f.email_field :email, autofocus: true
-  .field
-    = f.label :password
-    - if @minimum_password_length
-      em
-        | (
-        = @minimum_password_length
-        |  characters minimum)
-    br
-    = f.password_field :password, autocomplete: "off"
-  .field
-    = f.label :password_confirmation
-    br
-    = f.password_field :password_confirmation, autocomplete: "off"
-  .actions
-    = f.submit "Sign up"
-= render "devise/shared/links"
+.text-center style=("padding:50px 0")
+  .logo Sign up
+  .login-form-1
+    = form_for(resource, as: resource_name, url: registration_path(resource_name), html: {id: 'register-form', class: 'text-left'}) do |f|
+      .login-form-main-message
+      .main-login-form
+        .login-group
+          .form-group
+            label.sr-only for="user[name]"  Name
+            input#reg_name.form-control name="user[name]" placeholder=("name") type="text" /
+
+          .form-group
+            label.sr-only for="user[email]"  Email
+            input#reg_email.form-control name="user[email]" placeholder="email" type="text" /
+
+          .form-group
+            label.sr-only for="user[password]"  Password
+            input#reg_password.form-control name="user[password]" placeholder="password" type="password" /
+            /- if @minimum_password_length
+            /  em
+            /    | (
+            /    = @minimum_password_length
+            /    |  characters minimum)
+
+          .form-group
+            label.sr-only for="user[password_confirm]"  Password Confirm
+            input#reg_password_confirm.form-control name="user[password_confirm]" placeholder=("confirm password") type="password" /
+
+        button.login-button type="submit"
+          i.fa.fa-chevron-right
+
+      .etc-login-form
+        = render "devise/shared/links"

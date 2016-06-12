@@ -49,6 +49,8 @@ gem 'actioncable', github: 'rails/actioncable', branch: 'archive'
 
 gem 'puma'
 
+gem "font-awesome-rails"
+
 # Use ActiveModel has_secure_password
 # gem 'bcrypt', '~> 3.1.7'
 

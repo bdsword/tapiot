@@ -4,7 +4,7 @@ class TapsController < ApplicationController
   protect_from_forgery except: [:turn_on, :turn_off]
 
   # TODO: :turn_on and :turn_off should be handle by another authenticate method
-  before_action :authenticate_user!, except: [:index, :show, :turn_on, :turn_off, :web_turn_off_update]
+  before_action :authenticate_user!, except: [:show, :turn_on, :turn_off, :web_turn_off_update]
   before_action only: [:new, :edit, :create, :update, :destroy] do
     render(file: 'public/403.html', status: :forbidden, layout: false) unless current_user.admin?
   end
@@ -20,7 +20,7 @@ class TapsController < ApplicationController
     @tap = Tap.find(params[:id])
 
     @search = WaterUse.search(params[:q])
-    @water_uses = @search.result.where(tap_id: params[:id]).page(params[:page]).per(15)
+    @water_uses = @search.result.where(tap_id: params[:id]).where.not(water_consumed: nil).page(params[:page]).per(15)
 
     respond_with @tap
   end

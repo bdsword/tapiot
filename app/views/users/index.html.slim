@@ -1,3 +1,29 @@
 - @users.each do |user|
-  = user.name
-  = user.email
+  .col-md-6
+    .panel.panel-info
+      .panel-heading
+        h3.panel-title #{user.name}
+      .panel-body
+        .row
+          .col-md-3 align="center"
+            img.img-circle.img-responsive alt=("User Pic") src="http://babyinfoforyou.com/wp-content/uploads/2014/10/avatar-300x300.png" /
+          .col-md-9
+            table.table.table-user-information
+              tbody
+                tr
+                  td User ID:
+                  td #{user.id}
+                tr
+                  td Email
+                  td
+                    a href="mailto:info@support.com"  #{user.email}
+            a
+              = link_to 'Water consumption records',user_path(user), class: 'btn btn-primary'
+      /.panel-footer
+      /  a.btn.btn-sm.btn-primary data-original-title=("Broadcast Message") data-toggle="tooltip" type="button"
+      /    i.glyphicon.glyphicon-envelope
+      /  span.pull-right
+      /    a.btn.btn-sm.btn-warning data-original-title=("Edit this user") data-toggle="tooltip" href="edit.html" type="button"
+      /      i.glyphicon.glyphicon-edit
+      /    a.btn.btn-sm.btn-danger data-original-title=("Remove this user") data-toggle="tooltip" type="button"
+      /      i.glyphicon.glyphicon-remove
