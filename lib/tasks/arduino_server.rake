@@ -72,6 +72,7 @@ namespace :arduino_server do
 
         socket_pools[tap_id] = client
         tap_opened[tap_id] = false
+        puts("Client tap #{tap_id} attached!\n")
 
         loop do
           action, rfid, record_id, water_used = client.readline.split(' ')
