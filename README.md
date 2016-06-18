@@ -1,4 +1,7 @@
 # TAPIoT Services
+TAPIoT is a project that can bring wisdom to your taps.
+
+[Tapiot](https://github.com/bdsword/tapiot) is a sub-project under TAPIoT, which is the website and server part of TAPIoT. 
 
 ## Requirements
 1. redis >= 3.0
